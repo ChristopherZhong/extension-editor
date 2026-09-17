@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { LLMProviderRegistry } from '../src/providers/LLMProviderRegistry';
-import { OllamaProvider } from '../src/providers/OllamaProvider';
+import { LLMProviderRegistry } from '../src/providers/llm-provider-registry';
+import { OllamaProvider } from '../src/providers/ollama-provider';
 import { ProviderConfig } from '../src/types/llm';
 
 describe('LLMProviderRegistry & OllamaProvider', () => {

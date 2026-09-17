@@ -1,6 +1,6 @@
 import { defineBackground } from 'wxt/sandbox';
-import { LLMProviderRegistry } from '../src/providers/LLMProviderRegistry';
-import { OllamaProvider } from '../src/providers/OllamaProvider';
+import { LLMProviderRegistry } from '../src/providers/llm-provider-registry';
+import { OllamaProvider } from '../src/providers/ollama-provider';
 import { getStoredSettings, saveStoredSettings } from '../src/utils/storage';
 import { ExtensionMessage, MessageResponse } from '../src/types/messaging';
 
@@ -12,7 +12,7 @@ export default defineBackground(() => {
     handleMessage(message)
       .then((res) => sendResponse(res))
       .catch((err) => sendResponse({ success: false, error: err.message || String(err) }));
-    return true; // Keep message channel open for async response
+    return true;
   });
 });
 

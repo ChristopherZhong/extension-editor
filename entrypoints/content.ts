@@ -1,8 +1,8 @@
 import { defineContentScript } from 'wxt/sandbox';
-import '../src/components/LlmEditorFloatingBadge';
-import '../src/components/LlmEditorSuggestionCard';
-import { LlmEditorFloatingBadge } from '../src/components/LlmEditorFloatingBadge';
-import { LlmEditorSuggestionCard } from '../src/components/LlmEditorSuggestionCard';
+import '../src/components/llm-editor-floating-badge';
+import '../src/components/llm-editor-suggestion-card';
+import { LlmEditorFloatingBadge } from '../src/components/llm-editor-floating-badge';
+import { LlmEditorSuggestionCard } from '../src/components/llm-editor-suggestion-card';
 import { ExtensionMessage, MessageResponse } from '../src/types/messaging';
 import { GrammarCheckResult, Suggestion, ToneType } from '../src/types/llm';
 

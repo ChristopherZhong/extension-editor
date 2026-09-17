@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { OllamaProvider } from '../src/providers/OllamaProvider';
+import { OllamaProvider } from '../src/providers/ollama-provider';
 import { ProviderConfig } from '../src/types/llm';
 
 describe('OllamaProvider Rewrite & Prompting', () => {
