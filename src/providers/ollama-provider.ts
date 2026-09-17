@@ -1,12 +1,27 @@
-import { LLMProvider, ProviderConfig, GrammarCheckResult, RewriteOptions, Suggestion } from '../types/llm';
+import { LLMProvider, ProviderConfig, GrammarCheckResult, RewriteOptions, Suggestion, ToneType } from '../types/llm';
+
+const TONE_PROMPT_MAP: Record<ToneType, string> = {
+  professional: 'Rewrite the text to sound polished, professional, and formal.',
+  casual: 'Rewrite the text to sound friendly, conversational, and casual.',
+  confident: 'Rewrite the text to sound authoritative, persuasive, and confident.',
+  friendly: 'Rewrite the text to sound warm, welcoming, and friendly.',
+  direct: 'Rewrite the text to be concise, direct, and straight to the point.',
+  expand: 'Expand on the text with richer details while preserving original meaning.',
+  shorten: 'Shorten the text aggressively while keeping the main point.'
+};
 
 export class OllamaProvider implements LLMProvider {
   public readonly id = 'ollama';
   public readonly name = 'Ollama (Local LLM)';
 
+  private getBaseUrl(config: ProviderConfig): string {
+    const rawUrl = config.baseUrl || 'http://localhost:11434';
+    return rawUrl.replace(/\/+$/, '');
+  }
+
   public async healthCheck(config: ProviderConfig): Promise<{ isAvailable: boolean; message?: string }> {
     try {
-      const baseUrl = this.cleanBaseUrl(config.baseUrl || 'http://localhost:11434');
+      const baseUrl = this.getBaseUrl(config);
       const response = await fetch(`${baseUrl}/api/tags`, { method: 'GET' });
       if (response.ok) {
         return { isAvailable: true, message: 'Ollama service is reachable.' };
@@ -19,7 +34,7 @@ export class OllamaProvider implements LLMProvider {
 
   public async listModels(config: ProviderConfig): Promise<string[]> {
     try {
-      const baseUrl = this.cleanBaseUrl(config.baseUrl || 'http://localhost:11434');
+      const baseUrl = this.getBaseUrl(config);
       const response = await fetch(`${baseUrl}/api/tags`);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -40,7 +55,7 @@ export class OllamaProvider implements LLMProvider {
       return { suggestions: [] };
     }
 
-    const baseUrl = this.cleanBaseUrl(config.baseUrl || 'http://localhost:11434');
+    const baseUrl = this.getBaseUrl(config);
     const model = config.model || 'llama3.2';
 
     const systemPrompt = `You are a strict, precise grammar and spelling checker.
@@ -87,34 +102,12 @@ If no errors are found, return: { "suggestions": [] }`;
   }
 
   public async rewriteText(text: string, options: RewriteOptions, config: ProviderConfig): Promise<string> {
-    const baseUrl = this.cleanBaseUrl(config.baseUrl || 'http://localhost:11434');
+    const baseUrl = this.getBaseUrl(config);
     const model = config.model || 'llama3.2';
 
     let promptGoal = 'Rewrite and improve the text for overall clarity and quality.';
-    if (options.tone) {
-      switch (options.tone) {
-        case 'professional':
-          promptGoal = 'Rewrite the text to sound polished, professional, and formal.';
-          break;
-        case 'casual':
-          promptGoal = 'Rewrite the text to sound friendly, conversational, and casual.';
-          break;
-        case 'confident':
-          promptGoal = 'Rewrite the text to sound authoritative, persuasive, and confident.';
-          break;
-        case 'friendly':
-          promptGoal = 'Rewrite the text to sound warm, welcoming, and friendly.';
-          break;
-        case 'direct':
-          promptGoal = 'Rewrite the text to be concise, direct, and straight to the point.';
-          break;
-        case 'expand':
-          promptGoal = 'Expand on the text with richer details while preserving original meaning.';
-          break;
-        case 'shorten':
-          promptGoal = 'Shorten the text aggressively while keeping the main point.';
-          break;
-      }
+    if (options.tone && TONE_PROMPT_MAP[options.tone]) {
+      promptGoal = TONE_PROMPT_MAP[options.tone];
     }
 
     if (options.customPrompt) {
@@ -145,10 +138,6 @@ If no errors are found, return: { "suggestions": [] }`;
       console.error('Ollama rewriteText error:', error);
       throw error;
     }
-  }
-
-  private cleanBaseUrl(url: string): string {
-    return url.replace(/\/+$/, '');
   }
 
   private parseGrammarResponse(rawJson: string, originalFullText: string): GrammarCheckResult {
