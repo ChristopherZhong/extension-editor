@@ -8,7 +8,7 @@ import { GrammarCheckResult, Suggestion, ToneType } from '../src/types/llm';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
-  main(ctx) {
+  main(context) {
     let activeElement: HTMLInputElement | HTMLTextAreaElement | HTMLElement | null = null;
     let badgeElement: LlmEditorFloatingBadge | null = null;
     let cardElement: LlmEditorSuggestionCard | null = null;
@@ -31,13 +31,13 @@ export default defineContentScript({
         cardElement = document.createElement('llm-editor-suggestion-card') as LlmEditorSuggestionCard;
         document.body.appendChild(cardElement);
 
-        cardElement.addEventListener('accept-suggestion', (e: any) => {
-          const sug: Suggestion = e.detail.suggestion;
-          applySuggestion(sug);
+        cardElement.addEventListener('accept-suggestion', (event: any) => {
+          const suggestion: Suggestion = event.detail.suggestion;
+          applySuggestion(suggestion);
         });
 
-        cardElement.addEventListener('apply-tone', (e: any) => {
-          const tone: ToneType = e.detail.tone;
+        cardElement.addEventListener('apply-tone', (event: any) => {
+          const tone: ToneType = event.detail.tone;
           applyToneRewrite(tone);
         });
 
@@ -89,26 +89,26 @@ export default defineContentScript({
       }
     }
 
-    function getElementText(el: HTMLElement): string {
-      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
-        return el.value;
+    function getElementText(element: HTMLElement): string {
+      if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+        return element.value;
       }
-      return el.innerText || el.textContent || '';
+      return element.innerText || element.textContent || '';
     }
 
-    function setElementText(el: HTMLElement, newText: string) {
-      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
-        el.value = newText;
-        el.dispatchEvent(new Event('input', { bubbles: true }));
-        el.dispatchEvent(new Event('change', { bubbles: true }));
-      } else if (el.isContentEditable) {
-        el.innerText = newText;
-        el.dispatchEvent(new Event('input', { bubbles: true }));
+    function setElementText(element: HTMLElement, newText: string) {
+      if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+        element.value = newText;
+        element.dispatchEvent(new Event('input', { bubbles: true }));
+        element.dispatchEvent(new Event('change', { bubbles: true }));
+      } else if (element.isContentEditable) {
+        element.innerText = newText;
+        element.dispatchEvent(new Event('input', { bubbles: true }));
       }
     }
 
-    async function triggerGrammarCheck(el: HTMLElement) {
-      const text = getElementText(el);
+    async function triggerGrammarCheck(element: HTMLElement) {
+      const text = getElementText(element);
       if (!text || text.trim().length === 0) {
         currentSuggestions = [];
         if (badgeElement) {
@@ -146,7 +146,7 @@ export default defineContentScript({
             badgeElement.statusMessage = response?.error || 'Connection error';
           }
         }
-      } catch (err: any) {
+      } catch (error: any) {
         if (badgeElement) {
           badgeElement.loading = false;
           badgeElement.hasError = true;
@@ -155,15 +155,15 @@ export default defineContentScript({
       }
     }
 
-    function applySuggestion(sug: Suggestion) {
+    function applySuggestion(suggestion: Suggestion) {
       if (!activeElement) return;
       const text = getElementText(activeElement);
       if (!text) return;
 
-      const updatedText = text.replace(sug.originalText, sug.suggestedText);
+      const updatedText = text.replace(suggestion.originalText, suggestion.suggestedText);
       setElementText(activeElement, updatedText);
 
-      currentSuggestions = currentSuggestions.filter((s) => s.id !== sug.id);
+      currentSuggestions = currentSuggestions.filter((item) => item.id !== suggestion.id);
       if (badgeElement) badgeElement.count = currentSuggestions.length;
       if (cardElement) cardElement.suggestions = currentSuggestions;
 
@@ -195,7 +195,7 @@ export default defineContentScript({
         } else if (cardElement) {
           cardElement.statusMessage = response?.error || 'Rewrite failed';
         }
-      } catch (err) {
+      } catch (error) {
         if (cardElement) {
           cardElement.loading = false;
           cardElement.statusMessage = 'Failed to request rewrite';
@@ -203,8 +203,8 @@ export default defineContentScript({
       }
     }
 
-    document.addEventListener('focusin', (e) => {
-      const target = e.target as HTMLElement;
+    document.addEventListener('focusin', (event) => {
+      const target = event.target as HTMLElement;
       if (
         target &&
         (target instanceof HTMLInputElement ||
@@ -218,8 +218,8 @@ export default defineContentScript({
       }
     });
 
-    document.addEventListener('input', (e) => {
-      const target = e.target as HTMLElement;
+    document.addEventListener('input', (event) => {
+      const target = event.target as HTMLElement;
       if (target === activeElement) {
         positionBadge(target);
         clearTimeout(debounceTimer);
