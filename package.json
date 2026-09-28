@@ -5,9 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wxt",
+    "dev": "wxt --browser chrome",
     "dev:firefox": "wxt --browser firefox",
-    "build": "wxt build",
+    "build": "wxt build --browser chrome",
     "build:firefox": "wxt build --browser firefox",
     "zip": "npm run zip:chrome && npm run zip:firefox",
     "zip:chrome": "wxt zip --browser chrome",
