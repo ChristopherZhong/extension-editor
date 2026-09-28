@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -33,22 +35,8 @@ jobs:
       - name: Run unit tests
         run: npm run test
 
-      - name: Build release zips
-        run: npm run zip
-
-      - name: Get version from package.json
-        id: package-version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.package-version.outputs.version }}
-          name: Release v${{ steps.package-version.outputs.version }}
-          draft: ${{ github.event_name == 'workflow_dispatch' }}
-          prerelease: false
-          generate_release_notes: true
-          files: |
-            .output/*.zip
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IS_DRAFT: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
+        run: npx semantic-release
