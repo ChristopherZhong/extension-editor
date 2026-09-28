@@ -17,12 +17,6 @@
     "test:watch": "vitest",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "tsc --noEmit",
-      "vitest run --findRelatedTests"
-    ]
-  },
   "dependencies": {
     "lit": "^3.2.1",
     "webextension-polyfill": "^0.12.0"
@@ -35,7 +29,6 @@
     "@commitlint/config-conventional": "^21.2.3",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^11.0.1",
-    "@semantic-release/github": "^12.0.10",
     "@types/chrome": "^0.3.0",
     "@types/node": "^26.6.2",
     "@types/webextension-polyfill": "^0.12.0",
