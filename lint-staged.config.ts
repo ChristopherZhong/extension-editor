@@ -1,8 +1,6 @@
-import type { Configuration } from 'lint-staged';
+import { defineConfig } from 'lint-staged/config';
 
-const config: Configuration = {
+export default defineConfig({
   '*.{ts,tsx}': () => 'tsc --noEmit',
   '*.{js,ts,tsx}': 'vitest related --run',
-};
-
-export default config;
+});
