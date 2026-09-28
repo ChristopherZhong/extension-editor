@@ -1,4 +1,4 @@
-import { defineBackground } from 'wxt/sandbox';
+import { defineBackground } from 'wxt/utils/define-background';
 import { LLMProviderRegistry } from '../src/providers/llm-provider-registry';
 import { OllamaProvider } from '../src/providers/ollama-provider';
 import { getStoredSettings, saveStoredSettings } from '../src/utils/storage';

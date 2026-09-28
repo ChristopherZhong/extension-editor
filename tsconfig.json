@@ -11,7 +11,7 @@
     "useDefineForClassFields": false,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "types": ["wxt/client", "vitest/globals", "chrome"]
+    "types": ["vitest/globals", "chrome"]
   },
   "include": ["entrypoints/**/*", "src/**/*", "wxt.config.ts"]
 }
