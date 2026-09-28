@@ -27,8 +27,12 @@ export default {
         draftRelease: isDraft,
         assets: [
           {
-            path: '.output/*.zip',
-            label: 'Extension Packages'
+            path: '.output/*-chrome.zip',
+            label: 'Chrome Extension (local-llm-extension-${nextRelease.version}-chrome.zip)'
+          },
+          {
+            path: '.output/*-firefox.zip',
+            label: 'Firefox Extension (local-llm-extension-${nextRelease.version}-firefox.zip)'
           }
         ]
       }
