@@ -5,12 +5,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wxt",
-    "dev:firefox": "wxt -b firefox",
-    "build": "wxt build",
-    "build:firefox": "wxt build -b firefox",
-    "zip": "wxt zip",
-    "zip:firefox": "wxt zip -b firefox",
+    "dev:chrome": "wxt --browser chrome",
+    "dev:firefox": "wxt --browser firefox",
+    "build:chrome": "wxt build --browser chrome",
+    "build:firefox": "wxt build --browser firefox",
+    "zip": "npm run zip:chrome && npm run zip:firefox",
+    "zip:chrome": "wxt zip --browser chrome",
+    "zip:firefox": "wxt zip --browser firefox",
     "compile": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -20,9 +21,14 @@
     "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.10",
     "@types/chrome": "^0.0.308",
     "@types/node": "^22.13.9",
     "@types/webextension-polyfill": "^0.12.0",
+    "conventional-changelog-conventionalcommits": "^10.4.0",
+    "semantic-release": "^25.0.9",
     "typescript": "^5.8.2",
     "vitest": "^3.0.7",
     "wxt": "^0.19.28"
