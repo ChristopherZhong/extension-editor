@@ -1,4 +1,4 @@
-import { defineContentScript } from 'wxt/sandbox';
+import { defineContentScript } from 'wxt/utils/define-content-script';
 import '../src/components/llm-editor-floating-badge';
 import '../src/components/llm-editor-suggestion-card';
 import { LlmEditorFloatingBadge } from '../src/components/llm-editor-floating-badge';
