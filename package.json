@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "wxt",
-    "dev:firefox": "wxt -b firefox",
+    "dev:firefox": "wxt --browser firefox",
     "build": "wxt build",
-    "build:firefox": "wxt build -b firefox",
+    "build:firefox": "wxt build --browser firefox",
     "zip": "npm run zip:chrome && npm run zip:firefox",
     "zip:chrome": "wxt zip --browser chrome",
     "zip:firefox": "wxt zip --browser firefox",
