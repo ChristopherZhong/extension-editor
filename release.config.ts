@@ -18,7 +18,7 @@ export default {
     [
       '@semantic-release/exec',
       {
-        prepareCmd: 'npm version ${nextRelease.version} --no-git-tag-version && npm run zip'
+        prepareCmd: 'npm pkg set version=${nextRelease.version} && npm run zip'
       }
     ],
     [
@@ -31,16 +31,6 @@ export default {
             label: 'Extension Packages'
           }
         ]
-      }
-    ],
-    [
-      '@semantic-release/git',
-      {
-        assets: [
-          'package.json',
-          'package-lock.json'
-        ],
-        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}'
       }
     ]
   ]
