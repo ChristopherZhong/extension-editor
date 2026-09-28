@@ -16,10 +16,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
@@ -33,11 +33,8 @@ jobs:
       - name: Run unit tests
         run: npm run test
 
-      - name: Build Chrome release zip
+      - name: Build release zips
         run: npm run zip
-
-      - name: Build Firefox release zip
-        run: npm run zip:firefox
 
       - name: Get version from package.json
         id: package-version
@@ -46,7 +43,7 @@ jobs:
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.package-version.outputs.version }}
           name: Release v${{ steps.package-version.outputs.version }}
