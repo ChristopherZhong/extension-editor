@@ -37,6 +37,6 @@
     "semantic-release": "^25.0.9",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5",
-    "wxt": "^0.21.4"
+    "wxt": "^0.21.5"
   }
 }
