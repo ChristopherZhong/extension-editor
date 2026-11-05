@@ -5,7 +5,13 @@
 
 version: 2
 updates:
+  - package-ecosystem: "github-actions" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      cronjob: "0 1 * * *"
+      interval: "cron"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      cronjob: "0 1 * * *"
+      interval: "cron"
